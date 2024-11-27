@@ -19,6 +19,7 @@ app.use(express.json());
 
 // Start server
 const PORT = process.env.PORT || 5000;
+console.log("liad");
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
