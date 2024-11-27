@@ -14,22 +14,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    maxPlayers: {
-      type: DataTypes.INTEGER,
-      defaultValue: 4,
+    gameType: {
+      type: DataTypes.STRING,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('waiting', 'active', 'completed'),
+      defaultValue: 'waiting',
     },
   }, {
     tableName: 'rooms',
     timestamps: true,
   });
 
-  // Associations
   Room.associate = function(models) {
-    // Define any associations here if applicable
-    // Example:
-    // Room.hasMany(models.Game, { foreignKey: 'roomId' });
-    Room.belongsTo(models.User, { foreignKey: 'id' });
+    Room.belongsTo(models.User, { foreignKey: 'hostId' });
+    Room.hasOne(models.Game, { foreignKey: 'roomId' });
   };
 
   return Room;

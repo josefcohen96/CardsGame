@@ -15,22 +15,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    achievements: {
-      type: DataTypes.JSON, // Store a list of achievements in JSON format
-      allowNull: true,
+    wins: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    losses: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   }, {
     tableName: 'users',
     timestamps: true,
   });
 
-  // Associations
   User.associate = function(models) {
-    // Define any associations here if applicable
-    // Example:
-    // User.hasMany(models.Room, { foreignKey: 'hostId' });
+    User.hasMany(models.Room, { foreignKey: 'hostId' });
+    User.hasMany(models.Player, { foreignKey: 'userId' });
     User.hasMany(models.Friend, { foreignKey: 'userId' });
-    // User.hasMany(models.Game, { foreignKey: 'playerId' });
   };
 
   return User;
