@@ -11,24 +11,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     state: {
-      type: DataTypes.ENUM('waiting', 'in-progress', 'completed'),
-      allowNull: false,
-      defaultValue: 'waiting',
-    },
-    result: {
-      type: DataTypes.JSON, // Store game results in JSON format
+      type: DataTypes.JSON, // JSON to store current game state
       allowNull: true,
+    },
+    currentTurn: {
+      type: DataTypes.UUID, // Player whose turn it is
+      allowNull: true,
+    },
+    winnerId: {
+      type: DataTypes.UUID, // Winning player's ID
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.ENUM('waiting', 'in-progress', 'completed'),
+      defaultValue: 'waiting',
     },
   }, {
     tableName: 'games',
     timestamps: true,
   });
 
-  // Associations
   Game.associate = function(models) {
-    // Define any associations here if applicable
-    // Example:
-    Game.belongsTo(models.Room, { foreignKey: 'id' });
+    Game.belongsTo(models.Room, { foreignKey: 'roomId' });
+    Game.hasMany(models.Player, { foreignKey: 'gameId' });
   };
 
   return Game;

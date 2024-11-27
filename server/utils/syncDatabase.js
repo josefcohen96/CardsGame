@@ -1,18 +1,18 @@
-const sequelize = require('../config/dbConfig');
-const User = require('../models/User');
-const Room = require('../models/Room');
-const Game = require('../models/Game');
-const Friend = require('../models/Friend');
+const { sequelize } = require('../models'); // Import sequelize instance from models/index.js
 
 (async () => {
   try {
     console.log('Starting database synchronization...');
-    await sequelize.sync({ force: true }); // שים לב: force: true מוחק ומבצע יצירה מחדש
-    console.log('All models were synchronized successfully.');
+    await sequelize.sync({ force: true }); // Synchronize all models with the database
+    console.log('Database synchronized successfully.');
   } catch (error) {
-    console.error('Error synchronizing models:', error);
+    console.error('Error synchronizing database:', error);
   } finally {
-    await sequelize.close(); // סגור את החיבור אחרי הסנכרון
-    console.log('Database connection closed.');
+    if (sequelize && sequelize.close) {
+      await sequelize.close(); // Close the connection
+      console.log('Database connection closed.');
+    } else {
+      console.error('Failed to close the database connection. Check the sequelize instance.');
+    }
   }
 })();
