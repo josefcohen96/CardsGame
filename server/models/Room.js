@@ -6,27 +6,28 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    roomName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    hostId: {
-      type: DataTypes.UUID,
+    maxPlayers: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 4, // Example default max players
     },
-    gameType: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    players: {
+      type: DataTypes.ARRAY(DataTypes.UUID), // Array of player IDs
+      defaultValue: [],
     },
-    status: {
-      type: DataTypes.ENUM('waiting', 'active', 'completed'),
-      defaultValue: 'waiting',
+    isStarted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   }, {
     tableName: 'rooms',
     timestamps: true,
   });
-
+  
   Room.associate = function(models) {
     Room.belongsTo(models.User, { foreignKey: 'hostId' });
     Room.hasOne(models.Game, { foreignKey: 'roomId' });
@@ -34,3 +35,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return Room;
 };
+

@@ -19,10 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
+  
   Friend.associate = function(models) {
-    Friend.belongsTo(models.User, { foreignKey: 'userId' });
-    Friend.belongsTo(models.User, { foreignKey: 'friendId' });
+    Friend.belongsTo(models.User, { foreignKey: 'userId' }); // Alias for userId
+    Friend.belongsTo(models.User, { foreignKey: 'friendId' }); // Alias for friendId
   };
+  // Friend.associate = function(models) {
+  //   Friend.belongsTo(models.User, { foreignKey: 'userId', as: 'User' }); // Alias for userId
+  //   Friend.belongsTo(models.User, { foreignKey: 'friendId', as: 'FriendUser' }); // Alias for friendId
+  // };
 
   return Friend;
 };
