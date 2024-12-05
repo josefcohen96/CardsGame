@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
@@ -15,23 +16,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    wins: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+    achievements: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
-    losses: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+    stats: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
-  }, {
-    tableName: 'users',
-    timestamps: true,
-  });
+  }, { timestamps: true });
 
   User.associate = function(models) {
     User.hasMany(models.Room, { foreignKey: 'hostId' });
-    User.hasMany(models.Player, { foreignKey: 'userId' });
-    User.hasMany(models.Friend, { foreignKey: 'userId' });
+    User.hasMany(models.PlayerGameStats, { foreignKey: 'playerId' });
+    User.hasMany(models.Friend, { foreignKey: 'userId', as: 'Friends' }); // Friends initiated by this user
+    User.hasMany(models.Friend, { foreignKey: 'friendId', as: 'FriendOf' }); // Friends where this user is the recipient
   };
 
   return User;

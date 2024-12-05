@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Room = sequelize.define('Room', {
     id: {
@@ -6,33 +7,29 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+    roomName: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    hostId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
     maxPlayers: {
       type: DataTypes.INTEGER,
+      defaultValue: 4,
       allowNull: false,
-      defaultValue: 4, // Example default max players
     },
-    players: {
-      type: DataTypes.ARRAY(DataTypes.UUID), // Array of player IDs
-      defaultValue: [],
+    gameType: {
+      type: DataTypes.ENUM('Poker', 'Shithead', 'Durak'),
+      allowNull: false,
     },
-    isStarted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-  }, {
-    tableName: 'rooms',
-    timestamps: true,
-  });
-  
+  }, { timestamps: true });
+
   Room.associate = function(models) {
     Room.belongsTo(models.User, { foreignKey: 'hostId' });
-    Room.hasOne(models.Game, { foreignKey: 'roomId' });
+    Room.hasMany(models.Game, { foreignKey: 'roomId' });
   };
 
   return Room;
 };
-

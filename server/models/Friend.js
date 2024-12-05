@@ -14,12 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-  }, {
-    tableName: 'friends',
-    timestamps: true,
-  });
+    status: {
+      type: DataTypes.ENUM('pending', 'accepted', 'rejected'),
+      defaultValue: 'pending',
+      allowNull: false,
+    },
+  }, { timestamps: true });
 
-  
   Friend.associate = function(models) {
     Friend.belongsTo(models.User, { foreignKey: 'userId' }); // Alias for userId
     Friend.belongsTo(models.User, { foreignKey: 'friendId' }); // Alias for friendId
